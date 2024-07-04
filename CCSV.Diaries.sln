@@ -1,0 +1,28 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSV.Diaries", "src\CCSV.Diaries\CCSV.Diaries.csproj", "{2E97434F-FC4C-4F0E-94F6-6ABDA8B2A872}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSV.Diaries.Tests", "tests\CCSV.Diaries.Tests\CCSV.Diaries.Tests.csproj", "{0722CE9C-290C-47BE-839E-8AF5574A9C2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E97434F-FC4C-4F0E-94F6-6ABDA8B2A872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E97434F-FC4C-4F0E-94F6-6ABDA8B2A872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E97434F-FC4C-4F0E-94F6-6ABDA8B2A872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E97434F-FC4C-4F0E-94F6-6ABDA8B2A872}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0722CE9C-290C-47BE-839E-8AF5574A9C2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0722CE9C-290C-47BE-839E-8AF5574A9C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0722CE9C-290C-47BE-839E-8AF5574A9C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0722CE9C-290C-47BE-839E-8AF5574A9C2B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

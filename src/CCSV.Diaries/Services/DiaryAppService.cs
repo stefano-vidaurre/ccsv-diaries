@@ -1,0 +1,50 @@
+using AutoMapper;
+using CCSV.Diaries.Dtos.Diaries;
+using CCSV.Diaries.Dtos.Entries;
+using CCSV.Diaries.Models;
+using CCSV.Diaries.Repositories;
+using CCSV.Domain.Enums;
+
+namespace CCSV.Diaries.Services;
+
+public class DiaryAppService : IDiaryAppService {
+    private readonly IDiaryRepository _diaryRepository;
+    private readonly IMapper _mapper;
+
+    public DiaryAppService(IDiaryRepository diaryRepository, IMapper mapper) {
+        _diaryRepository = diaryRepository;
+        _mapper = mapper;
+    }
+
+    public async Task<IEnumerable<DiaryQueryDto>> GetAll() {
+        IEnumerable<Diary> diaries = await _diaryRepository.GetAll();
+        return _mapper.Map<IEnumerable<Diary>, IEnumerable<DiaryQueryDto>>(diaries);
+    }
+
+    public async Task<DiaryReadDto> GetById(Guid id) {
+        Diary diary = await _diaryRepository.GetById(id);
+        return _mapper.Map<Diary, DiaryReadDto>(diary);
+    }
+
+    public async Task Create(DiaryCreateDto data) {
+        Diary diary = new Diary(data.Id);
+        await _diaryRepository.Create(diary);
+    }
+
+    public async Task AddEntry(Guid id, EntryCreateDto data) {
+        Diary diary = await _diaryRepository.GetById(id);
+        State state = EnumParser.Parse<State>(data.State);
+        diary.AddEntry(data.Id, state);
+    }
+
+    public async Task RemoveEntry(Guid id, Guid entryId) {
+        Diary diary = await _diaryRepository.GetById(id);
+        Entry entry = diary.GetEntry(entryId);
+        diary.RemoveEntry(entry);
+    }
+    
+    public async Task Delete(Guid id) {
+        Diary diary = await _diaryRepository.GetById(id);
+        await _diaryRepository.Delete(diary);
+    }    
+}

@@ -36,16 +36,16 @@ public class DiaryAppService : IDiaryAppService
         await _diaryRepository.Create(diary);
     }
 
-    public async Task AddEntry(Guid id, EntryCreateDto data)
+    public async Task AddEntry(Guid diaryId, EntryCreateDto data)
     {
-        Diary diary = await _diaryRepository.GetById(id);
+        Diary diary = await _diaryRepository.GetById(diaryId);
         State state = EnumParser.Parse<State>(data.State);
         diary.AddEntry(data.Id, state);
     }
 
-    public async Task RemoveEntry(Guid id, Guid entryId)
+    public async Task RemoveEntry(Guid diaryId, Guid entryId)
     {
-        Diary diary = await _diaryRepository.GetById(id);
+        Diary diary = await _diaryRepository.GetById(diaryId);
         Entry entry = diary.GetEntry(entryId);
         diary.RemoveEntry(entry);
     }

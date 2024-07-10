@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSV.Diaries", "src\CCSV.Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSV.Diaries.Tests", "tests\CCSV.Diaries.Tests\CCSV.Diaries.Tests.csproj", "{0722CE9C-290C-47BE-839E-8AF5574A9C2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSV.Diaries.UI.Api", "src\CCSV.Diaries.UI.Api\CCSV.Diaries.UI.Api.csproj", "{6F0C21C0-5872-4C9F-9E19-B8E849443C90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{0722CE9C-290C-47BE-839E-8AF5574A9C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0722CE9C-290C-47BE-839E-8AF5574A9C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0722CE9C-290C-47BE-839E-8AF5574A9C2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F0C21C0-5872-4C9F-9E19-B8E849443C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F0C21C0-5872-4C9F-9E19-B8E849443C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F0C21C0-5872-4C9F-9E19-B8E849443C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F0C21C0-5872-4C9F-9E19-B8E849443C90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

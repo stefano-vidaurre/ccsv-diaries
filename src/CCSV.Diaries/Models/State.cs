@@ -1,6 +1,7 @@
 namespace CCSV.Diaries.Models;
 
-public enum State {
+public enum State
+{
     None = 0,
     Bad,
     Normal,

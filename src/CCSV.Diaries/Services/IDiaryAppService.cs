@@ -3,7 +3,8 @@ using CCSV.Diaries.Dtos.Entries;
 
 namespace CCSV.Diaries.Services;
 
-public interface IDiaryAppService {
+public interface IDiaryAppService
+{
     Task<IEnumerable<DiaryQueryDto>> GetAll();
     Task<DiaryReadDto> GetById(Guid id);
     Task Create(DiaryCreateDto data);

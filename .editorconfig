@@ -13,13 +13,13 @@ dotnet_style_collection_initializer = false
 dotnet_diagnostic.IDE0011.severity = warning
 
 # S4136: Method overloads should be grouped together
-dotnet_diagnostic.S4136.severity = none
+dotnet_diagnostic.S4136.severity = warning
 
 # IDE0057: Usar el operador de intervalo
 csharp_style_prefer_range_operator = false
 
 # CA1822: Mark members as static
-dotnet_diagnostic.CA1822.severity = none
+dotnet_diagnostic.CA1822.severity = warning
 
 # IDE0090: Use 'new(...)'
 csharp_style_implicit_object_creation_when_type_is_apparent = false
@@ -99,3 +99,10 @@ dotnet_naming_style.pascal_case.required_prefix =
 dotnet_naming_style.pascal_case.required_suffix = 
 dotnet_naming_style.pascal_case.word_separator = 
 dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+#  CSharp formatting rules:
+[*.cs]
+csharp_new_line_before_open_brace = methods, properties, control_blocks, types
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true

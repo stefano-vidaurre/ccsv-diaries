@@ -4,7 +4,7 @@ using CCSV.Diaries.Models;
 
 namespace CCSV.Diaries.Services.Mappings;
 
-public class EntryMappingProfile: Profile
+public class EntryMappingProfile : Profile
 {
     public EntryMappingProfile()
     {

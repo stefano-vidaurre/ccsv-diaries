@@ -23,7 +23,7 @@ public class DiaryShould
         Guid entryId = Guid.NewGuid();
 
         diary.AddEntry(entryId, State.Normal);
-    
+
         Entry result = diary.GetEntry(entryId);
         result.Id.Should().Be(entryId);
         result.State.Should().Be(State.Normal);
@@ -37,7 +37,7 @@ public class DiaryShould
         diary.AddEntry(entryId, State.Normal);
 
         Action result = () => diary.AddEntry(entryId, State.Normal);
-    
+
         result.Should().Throw<DuplicatedValueException>();
     }
 
@@ -47,10 +47,10 @@ public class DiaryShould
         Diary diary = new Diary(Guid.NewGuid());
         Guid entryId = Guid.NewGuid();
         diary.AddEntry(entryId, State.Normal);
-    
+
         Entry entry = diary.GetEntry(entryId);
         diary.RemoveEntry(entry);
-    
+
         Func<Entry> result = () => diary.GetEntry(entryId);
         result.Should().Throw<ValueNotFoundException>();
     }

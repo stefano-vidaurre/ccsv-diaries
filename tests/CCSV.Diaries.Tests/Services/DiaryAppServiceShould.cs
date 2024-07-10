@@ -11,35 +11,40 @@ using FluentAssertions;
 
 namespace CCSV.Diaries.Tests.Services;
 
-public class DiaryAppServiceShould : IDisposable {
+public class DiaryAppServiceShould : IDisposable
+{
     private readonly ApplicationContext _applicationContext;
     private readonly IDiaryRepository _diaryRepository;
     private readonly IMapper _mapper;
 
     private readonly DiaryAppService _diaryAppService;
 
-    public DiaryAppServiceShould() {
+    public DiaryAppServiceShould()
+    {
         _applicationContext = InMemoryApplicationContext.Create();
         _diaryRepository = new DiaryRepository(_applicationContext);
         _mapper = AutoMapperFactory.Create();
         _diaryAppService = new DiaryAppService(_diaryRepository, _mapper);
     }
 
-    public void Dispose() {
+    public void Dispose()
+    {
         _applicationContext.Dispose();
     }
 
     [Fact]
-    public async Task GetEmptyList() {
+    public async Task GetEmptyList()
+    {
         IEnumerable<DiaryQueryDto> result = await _diaryAppService.GetAll();
 
         result.Should().BeEmpty();
     }
 
     [Fact]
-    public async Task CreateADiary() {
+    public async Task CreateADiary()
+    {
         DiaryCreateDto createDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
-    
+
         await _diaryAppService.Create(createDto);
         await _applicationContext.SaveChangesAsync();
 
@@ -48,25 +53,33 @@ public class DiaryAppServiceShould : IDisposable {
     }
 
     [Fact]
-    public async Task AddEntry() {
+    public async Task AddEntry()
+    {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(diaryCreateDto);
         await _applicationContext.SaveChangesAsync();
-        EntryCreateDto entryCreateDto = new EntryCreateDto() { Id = Guid.NewGuid(), State = "Normal" };
+        EntryCreateDto entryCreateDto = new EntryCreateDto() {
+            Id = Guid.NewGuid(),
+            State = "Normal"
+        };
 
         await _diaryAppService.AddEntry(diaryCreateDto.Id, entryCreateDto);
         await _applicationContext.SaveChangesAsync();
-    
+
         DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
         result.Entries.Should().Contain(entry => entry.Id == entryCreateDto.Id);
     }
 
     [Fact]
-    public async Task RemoveEntry() {
+    public async Task RemoveEntry()
+    {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(diaryCreateDto);
         await _applicationContext.SaveChangesAsync();
-        EntryCreateDto entryCreateDto = new EntryCreateDto() { Id = Guid.NewGuid(), State = "Normal" };
+        EntryCreateDto entryCreateDto = new EntryCreateDto() {
+            Id = Guid.NewGuid(),
+            State = "Normal"
+        };
         await _diaryAppService.AddEntry(diaryCreateDto.Id, entryCreateDto);
         await _applicationContext.SaveChangesAsync();
 
@@ -78,14 +91,15 @@ public class DiaryAppServiceShould : IDisposable {
     }
 
     [Fact]
-    public async Task DeleteADiary() {
+    public async Task DeleteADiary()
+    {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(diaryCreateDto);
         await _applicationContext.SaveChangesAsync();
-    
+
         await _diaryAppService.Delete(diaryCreateDto.Id);
         await _applicationContext.SaveChangesAsync();
-    
+
         Func<Task<DiaryReadDto>> result = async () => await _diaryAppService.GetById(diaryCreateDto.Id);
         await result.Should().ThrowAsync<ValueNotFoundException>();
     }

@@ -3,7 +3,7 @@ using CCSV.Diaries.Dtos.Diaries;
 using CCSV.Diaries.Dtos.Entries;
 using CCSV.Diaries.Models;
 using CCSV.Diaries.Repositories;
-using CCSV.Domain.Enums;
+using CCSV.Domain.Parsers;
 
 namespace CCSV.Diaries.Services;
 

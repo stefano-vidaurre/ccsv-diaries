@@ -5,8 +5,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CCSV.Domain" Version="8.0.3" />
-    <PackageReference Include="CCSV.Data.EFCore" Version="8.0.4" />
+    <PackageReference Include="CCSV.Domain" Version="8.0.4" />
+    <PackageReference Include="CCSV.Data.EFCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>

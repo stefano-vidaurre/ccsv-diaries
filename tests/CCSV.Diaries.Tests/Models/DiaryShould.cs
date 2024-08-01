@@ -67,4 +67,54 @@ public class DiaryShould
         Action result = () => diary.RemoveEntry(entry);
         result.Should().Throw<WrongOperationException>();
     }
+
+    [Fact]
+    public void UpdateExpirationDate()
+    {
+        Diary diary = new Diary(Guid.NewGuid());
+        DateTime expected = DateTime.UtcNow;
+
+        diary.SetExpirationDate(expected);
+
+        diary.ExpirationDate.Should().Be(expected);
+    }
+
+    [Fact]
+    public void FailWhenSetNonUTCExpirationDate()
+    {
+        Diary diary = new Diary(Guid.NewGuid());
+        DateTime expected = DateTime.Now;
+
+        Action result = () => diary.SetExpirationDate(expected);
+
+        result.Should().Throw<BusinessException>();
+    }
+
+    [Fact]
+    public void FailWhenTryToAddAEntryWithExpirationDateOutOfDate()
+    {
+        Diary diary = new Diary(Guid.NewGuid());
+        DateTime expected = DateTime.UtcNow;
+        Guid entryId = Guid.NewGuid();
+        diary.SetExpirationDate(expected);
+
+        Action result = () => diary.AddEntry(entryId, State.Normal);
+
+        result.Should().Throw<NotAllowedOperationException>();
+    }
+
+    [Fact]
+    public void FailWhenTryToRemoveAEntryWithExpirationDateOutOfDate()
+    {
+        Diary diary = new Diary(Guid.NewGuid());
+        Guid entryId = Guid.NewGuid();
+        diary.AddEntry(entryId, State.Normal);
+        DateTime expected = DateTime.UtcNow;
+        diary.SetExpirationDate(expected);
+        Entry entry = diary.GetEntry(entryId);
+
+        Action result = () => diary.RemoveEntry(entry);
+
+        result.Should().Throw<NotAllowedOperationException>();
+    }
 }

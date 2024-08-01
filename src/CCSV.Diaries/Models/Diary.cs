@@ -10,23 +10,35 @@ public class Diary : Entity
 
     private readonly IEntityList<Entry> _entries;
 
+    public DateTime ExpirationDate { get; private set; }
+
     public IEnumerable<Entry> Entries => _entries.AsEnumerable();
 
-    private Diary()
-        : base(Guid.Empty)
+    private Diary() : base(Guid.Empty)
     {
+        ExpirationDate = DateTime.MaxValue;
         _entries = new EntityList<Entry>();
     }
 
-    public Diary(Guid id)
-        : base(id)
+    public Diary(Guid id) : base(id)
     {
         if (id == Guid.Empty)
         {
             throw new InvalidValueException("The diary id cant be empty.");
         }
 
+        ExpirationDate = DateTime.MaxValue;
         _entries = new EntityList<Entry>();
+    }
+
+    public void SetExpirationDate(DateTime expirationDate)
+    {
+        if (expirationDate.Kind != DateTimeKind.Utc)
+        {
+            throw new BusinessException("The diary expiration date is not UTC.");
+        }
+
+        ExpirationDate = expirationDate;
     }
 
     public void AddEntry(Guid id, State state)
@@ -34,6 +46,11 @@ public class Diary : Entity
         if (_entries.GetByIdOrDefault(id) is not null)
         {
             throw new DuplicatedValueException("The entry already belongs to the diary.");
+        }
+
+        if (ExpirationDate < DateTime.UtcNow)
+        {
+            throw new NotAllowedOperationException("The diary expiration date is out of date.");
         }
 
         Entry entry = new Entry(id, this, state);
@@ -62,6 +79,11 @@ public class Diary : Entity
         if (entry is null)
         {
             throw new BusinessException("The entry cant be null.");
+        }
+
+        if (ExpirationDate < DateTime.UtcNow)
+        {
+            throw new NotAllowedOperationException("The expiration date of the diary is out of date.");
         }
 
         if (!_entries.Remove(entry))

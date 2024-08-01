@@ -36,6 +36,13 @@ public class DiaryAppService : IDiaryAppService
         await _diaryRepository.Create(diary);
     }
 
+    public async Task Update(Guid id, DiaryUpdateDto updateDto)
+    {
+        Diary diary = await _diaryRepository.GetById(id);
+        DateTime expirationDate = DateTimeParser.ParseUTC(updateDto.ExpirationDate);
+        diary.SetExpirationDate(expirationDate);
+    }
+
     public async Task AddEntry(Guid diaryId, EntryCreateDto data)
     {
         Diary diary = await _diaryRepository.GetById(diaryId);

@@ -10,15 +10,13 @@ public class Entry : Entity
     public Guid DiaryId { get; private set; }
     public State State { get; private set; }
 
-    private Entry()
-        : base(Guid.Empty)
+    private Entry() : base(Guid.Empty)
     {
         DiaryId = Guid.Empty;
         State = State.None;
     }
 
-    public Entry(Guid id, Diary diary, State state)
-        : base(id)
+    public Entry(Guid id, Diary diary, State state) : base(id)
     {
         if (id == Guid.Empty)
         {

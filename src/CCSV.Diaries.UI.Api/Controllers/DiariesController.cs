@@ -27,8 +27,13 @@ public class DiariesController : ControllerBase
     }
 
     [HttpPost]
-    public Task Create(DiaryCreateDto data) {
+    public Task Create([FromBody] DiaryCreateDto data) {
         return _diaryAppService.Create(data);
+    }
+
+    [HttpPut("{id}")]
+    public Task Update(Guid id, [FromBody] DiaryUpdateDto data) {
+        return _diaryAppService.Update(id, data);
     }
 
     [HttpDelete("{id}")]
@@ -37,7 +42,7 @@ public class DiariesController : ControllerBase
     }
 
     [HttpPost("{diaryId}/entries")]
-    public Task AddEntry(Guid diaryId, EntryCreateDto data){
+    public Task AddEntry(Guid diaryId, [FromBody] EntryCreateDto data){
         return _diaryAppService.AddEntry(diaryId, data);
     }
 

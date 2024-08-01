@@ -17,5 +17,6 @@ public class SqliteApplicationContext : ApplicationContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.Load("CCSV.Diaries"));
+        modelBuilder.UseUTCDateTimeConverter();
     }
 }

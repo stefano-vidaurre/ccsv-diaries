@@ -62,6 +62,20 @@ public class DiaryAppServiceShould : IDisposable
     }
 
     [Fact]
+    public async Task UpdateADiary()
+    {
+        DiaryCreateDto createDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
+        await _diaryAppService.Create(createDto);
+        await _applicationContext.SaveChangesAsync();
+        DiaryUpdateDto updateDto = new DiaryUpdateDto() { ExpirationDate = DateTime.UtcNow.ToString("O") };
+
+        await _diaryAppService.Update(createDto.Id, updateDto);
+
+        DiaryReadDto result = await _diaryAppService.GetById(createDto.Id);
+        result.ExpirationDate.Should().Be(updateDto.ExpirationDate);
+    }
+
+    [Fact]
     public async Task AddEntry()
     {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };

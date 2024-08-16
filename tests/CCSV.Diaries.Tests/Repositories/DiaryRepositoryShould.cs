@@ -79,4 +79,34 @@ public class DiaryRepositoryShould : IDisposable
         Func<Task<Diary>> result = async () => await _diaryRepository.GetById(expected.Id);
         await result.Should().ThrowAsync<ValueNotFoundException>();
     }
+
+    [Fact]
+    public async Task LogicDeleteADiary()
+    {
+        Diary expected = new Diary(Guid.NewGuid());
+        await _diaryRepository.Create(expected);
+        await _applicationContext.SaveChangesAsync();
+
+        expected.SetAsDeleted();
+        await _diaryRepository.Update(expected);
+        await _applicationContext.SaveChangesAsync();
+
+        IEnumerable<Diary> result = await _diaryRepository.GetAll();
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task GetLogicDeleteDiary()
+    {
+        Diary expected = new Diary(Guid.NewGuid());
+        await _diaryRepository.Create(expected);
+        await _applicationContext.SaveChangesAsync();
+        expected.SetAsDeleted();
+        await _diaryRepository.Update(expected);
+        await _applicationContext.SaveChangesAsync();
+
+        IEnumerable<Diary> result = await _diaryRepository.GetAll(true);
+
+        result.Should().ContainEquivalentOf(expected);
+    }
 }

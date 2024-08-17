@@ -6,8 +6,7 @@ public class InMemoryApplicationContext : SqliteApplicationContext, IDisposable
 {
     private readonly SqliteConnection _connection;
 
-    private InMemoryApplicationContext(SqliteConnection connection)
-        : base(connection)
+    private InMemoryApplicationContext(SqliteConnection connection) : base(connection)
     {
         Database.EnsureCreated();
         _connection = connection;

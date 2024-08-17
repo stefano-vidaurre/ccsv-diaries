@@ -96,7 +96,7 @@ public class DiaryRepositoryShould : IDisposable
     }
 
     [Fact]
-    public async Task GetLogicDeleteDiary()
+    public async Task GetLogicDeletedDiary()
     {
         Diary expected = new Diary(Guid.NewGuid());
         await _diaryRepository.Create(expected);
@@ -105,8 +105,108 @@ public class DiaryRepositoryShould : IDisposable
         await _diaryRepository.Update(expected);
         await _applicationContext.SaveChangesAsync();
 
-        IEnumerable<Diary> result = await _diaryRepository.GetAll(true);
+        IEnumerable<Diary> result = await _diaryRepository.GetAll(deletionsIncluded: true);
 
         result.Should().ContainEquivalentOf(expected);
+    }
+
+    [Fact]
+    public async Task ConfirmWhenItHasContent()
+    {
+        Diary expected = new Diary(Guid.NewGuid());
+        await _diaryRepository.Create(expected);
+        await _applicationContext.SaveChangesAsync();
+
+        bool result = await _diaryRepository.Any();
+
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task RefuseWhenItIsEmpty()
+    {
+        bool result = await _diaryRepository.Any();
+
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task RefuseWhenItHasOnlyLogicDeletes()
+    {
+        Diary expected = new Diary(Guid.NewGuid());
+        await _diaryRepository.Create(expected);
+        await _applicationContext.SaveChangesAsync();
+        expected.SetAsDeleted();
+        await _diaryRepository.Update(expected);
+        await _applicationContext.SaveChangesAsync();
+
+        bool result = await _diaryRepository.Any();
+        
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task ConfirmWhenConsiderLogicDeletes()
+    {
+        Diary expected = new Diary(Guid.NewGuid());
+        await _diaryRepository.Create(expected);
+        await _applicationContext.SaveChangesAsync();
+        expected.SetAsDeleted();
+        await _diaryRepository.Update(expected);
+        await _applicationContext.SaveChangesAsync();
+
+        bool result = await _diaryRepository.Any(deletionsIncluded: true);
+        
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ReturnOneWhenItHasOneRecord()
+    {
+        Diary expected = new Diary(Guid.NewGuid());
+        await _diaryRepository.Create(expected);
+        await _applicationContext.SaveChangesAsync();
+
+        int result = await _diaryRepository.Count();
+
+        result.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task ReturnZeroWhenItIsEmpty()
+    {
+        int result = await _diaryRepository.Count();
+
+        result.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task ReturnZeroWhenItHasOnlyOneLogicDelete()
+    {
+        Diary expected = new Diary(Guid.NewGuid());
+        await _diaryRepository.Create(expected);
+        await _applicationContext.SaveChangesAsync();
+        expected.SetAsDeleted();
+        await _diaryRepository.Update(expected);
+        await _applicationContext.SaveChangesAsync();
+
+        int result = await _diaryRepository.Count();
+        
+        result.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task ReturnOneWhenConsiderLogicDeletes()
+    {
+        Diary expected = new Diary(Guid.NewGuid());
+        await _diaryRepository.Create(expected);
+        await _applicationContext.SaveChangesAsync();
+        expected.SetAsDeleted();
+        await _diaryRepository.Update(expected);
+        await _applicationContext.SaveChangesAsync();
+
+        int result = await _diaryRepository.Count(deletionsIncluded: true);
+        
+        result.Should().Be(1);
     }
 }

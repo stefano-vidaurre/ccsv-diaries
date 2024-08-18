@@ -63,6 +63,12 @@ public class DiaryAppService : IDiaryAppService
         await _diaryRepository.Delete(diary);
     }
 
+    public async Task Enable(Guid id)
+    {
+        Diary diary = await _diaryRepository.GetById(id);
+        diary.SetAsEnabled();
+    }
+
     public async Task Disable(Guid id)
     {
         Diary diary = await _diaryRepository.GetById(id);

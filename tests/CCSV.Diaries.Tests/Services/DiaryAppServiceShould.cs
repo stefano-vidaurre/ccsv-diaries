@@ -138,6 +138,6 @@ public class DiaryAppServiceShould : IDisposable
         await _applicationContext.SaveChangesAsync();
 
         DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
-        result.IsDeleted.Should().BeTrue();
+        result.IsDisabled.Should().BeTrue();
     }
 }

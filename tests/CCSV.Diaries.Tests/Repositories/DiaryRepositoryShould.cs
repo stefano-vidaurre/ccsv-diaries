@@ -87,7 +87,7 @@ public class DiaryRepositoryShould : IDisposable
         await _diaryRepository.Create(expected);
         await _applicationContext.SaveChangesAsync();
 
-        expected.SetAsDeleted();
+        expected.SetAsDisabled();
         await _diaryRepository.Update(expected);
         await _applicationContext.SaveChangesAsync();
 
@@ -101,11 +101,11 @@ public class DiaryRepositoryShould : IDisposable
         Diary expected = new Diary(Guid.NewGuid());
         await _diaryRepository.Create(expected);
         await _applicationContext.SaveChangesAsync();
-        expected.SetAsDeleted();
+        expected.SetAsDisabled();
         await _diaryRepository.Update(expected);
         await _applicationContext.SaveChangesAsync();
 
-        IEnumerable<Diary> result = await _diaryRepository.GetAll(deletionsIncluded: true);
+        IEnumerable<Diary> result = await _diaryRepository.GetAll(disabledIncluded: true);
 
         result.Should().ContainEquivalentOf(expected);
     }
@@ -136,7 +136,7 @@ public class DiaryRepositoryShould : IDisposable
         Diary expected = new Diary(Guid.NewGuid());
         await _diaryRepository.Create(expected);
         await _applicationContext.SaveChangesAsync();
-        expected.SetAsDeleted();
+        expected.SetAsDisabled();
         await _diaryRepository.Update(expected);
         await _applicationContext.SaveChangesAsync();
 
@@ -151,11 +151,11 @@ public class DiaryRepositoryShould : IDisposable
         Diary expected = new Diary(Guid.NewGuid());
         await _diaryRepository.Create(expected);
         await _applicationContext.SaveChangesAsync();
-        expected.SetAsDeleted();
+        expected.SetAsDisabled();
         await _diaryRepository.Update(expected);
         await _applicationContext.SaveChangesAsync();
 
-        bool result = await _diaryRepository.Any(deletionsIncluded: true);
+        bool result = await _diaryRepository.Any(disabledIncluded: true);
         
         result.Should().BeTrue();
     }
@@ -186,7 +186,7 @@ public class DiaryRepositoryShould : IDisposable
         Diary expected = new Diary(Guid.NewGuid());
         await _diaryRepository.Create(expected);
         await _applicationContext.SaveChangesAsync();
-        expected.SetAsDeleted();
+        expected.SetAsDisabled();
         await _diaryRepository.Update(expected);
         await _applicationContext.SaveChangesAsync();
 
@@ -201,11 +201,11 @@ public class DiaryRepositoryShould : IDisposable
         Diary expected = new Diary(Guid.NewGuid());
         await _diaryRepository.Create(expected);
         await _applicationContext.SaveChangesAsync();
-        expected.SetAsDeleted();
+        expected.SetAsDisabled();
         await _diaryRepository.Update(expected);
         await _applicationContext.SaveChangesAsync();
 
-        int result = await _diaryRepository.Count(deletionsIncluded: true);
+        int result = await _diaryRepository.Count(disabledIncluded: true);
         
         result.Should().Be(1);
     }

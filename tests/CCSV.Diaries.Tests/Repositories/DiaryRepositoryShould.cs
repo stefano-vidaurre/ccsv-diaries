@@ -209,4 +209,20 @@ public class DiaryRepositoryShould : IDisposable
         
         result.Should().Be(1);
     }
+
+    [Fact]
+    public async Task FilterExpiredDiaries()
+    {
+        Diary expired = new Diary(Guid.NewGuid());
+        expired.SetExpirationDate(DateTime.UtcNow);
+        Diary notExpired = new Diary(Guid.NewGuid());
+        await _diaryRepository.Create(expired);
+        await _diaryRepository.Create(notExpired);
+        await _applicationContext.SaveChangesAsync();
+
+        IEnumerable<Diary> result = await _diaryRepository.GetAll(query => query.Where(diary => diary.ExpirationDate > DateTime.UtcNow));
+        
+        result.Should().ContainEquivalentOf(notExpired);
+        result.Should().NotContainEquivalentOf(expired);
+    }
 }

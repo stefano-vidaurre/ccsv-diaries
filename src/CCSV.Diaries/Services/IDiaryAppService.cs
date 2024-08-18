@@ -12,4 +12,5 @@ public interface IDiaryAppService
     Task AddEntry(Guid diaryId, EntryCreateDto data);
     Task RemoveEntry(Guid diaryId, Guid entryId);
     Task Delete(Guid id);
+    Task Disable(Guid id);
 }

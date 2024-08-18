@@ -126,4 +126,18 @@ public class DiaryAppServiceShould : IDisposable
         Func<Task<DiaryReadDto>> result = async () => await _diaryAppService.GetById(diaryCreateDto.Id);
         await result.Should().ThrowAsync<ValueNotFoundException>();
     }
+
+    [Fact]
+    public async Task DisableADiary()
+    {
+        DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
+        await _diaryAppService.Create(diaryCreateDto);
+        await _applicationContext.SaveChangesAsync();
+
+        await _diaryAppService.Disable(diaryCreateDto.Id);
+        await _applicationContext.SaveChangesAsync();
+
+        DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
+        result.IsDeleted.Should().BeTrue();
+    }
 }

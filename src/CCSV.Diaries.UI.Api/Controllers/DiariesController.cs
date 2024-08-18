@@ -50,4 +50,9 @@ public class DiariesController : ControllerBase
     public Task RemoveEntry(Guid diaryId, Guid entryId) {
         return _diaryAppService.RemoveEntry(diaryId, entryId);
     }
+
+    [HttpPut("{id}/Disable")]
+    public Task Disable(Guid id) {
+        return _diaryAppService.Disable(id);
+    }
 }

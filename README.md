@@ -1,6 +1,6 @@
 # CCSV.Diaries
 
-A simple set of example classes and tests cases.
+A simple set of example classes and test cases.
 
 ## Migrations
 

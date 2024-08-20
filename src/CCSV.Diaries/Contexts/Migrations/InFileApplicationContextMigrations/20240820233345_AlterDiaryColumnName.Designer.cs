@@ -3,6 +3,7 @@ using System;
 using CCSV.Diaries.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSV.Diaries.Contexts.Migrations.InFileApplicationContextMigrations
 {
     [DbContext(typeof(InFileApplicationContext))]
-    partial class InFileApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240820233345_AlterDiaryColumnName")]
+    partial class AlterDiaryColumnName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");

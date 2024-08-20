@@ -1,4 +1,5 @@
 using AutoMapper;
+using CCSV.Rest;
 using CCSV.Data.EFCore;
 using CCSV.Diaries.Contexts;
 using CCSV.Diaries.Repositories;
@@ -46,6 +47,8 @@ public static class Program
         }
 
         app.UseHttpsRedirection();
+
+        app.UseHttpStatusCodeExceptionHandler();
 
         app.UseUnitOfWork();
 

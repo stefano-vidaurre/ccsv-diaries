@@ -5,6 +5,7 @@ using CCSV.Diaries.Contexts;
 using CCSV.Diaries.Repositories;
 using CCSV.Diaries.Services;
 using CCSV.Diaries.Services.Mappings;
+using Serilog;
 
 namespace CCSV.Diaries.UI.Api;
 
@@ -12,12 +13,29 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-        builder.Services.ConfigureServices();
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();
+        Log.Information("Starting server...");
+        try
+        {
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+            builder.Services.ConfigureServices();
+            builder.Host.ConfigureLogger();
+            
+            var app = builder.Build();
+            app.ConfigureApp();
+            app.Run();
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "An unhandled exception occurred during bootstrapping.");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
 
-        var app = builder.Build();
-        app.ConfigureApp();
-        app.Run();
     }
 
     private static IServiceCollection ConfigureServices(this IServiceCollection services)
@@ -34,6 +52,12 @@ public static class Program
         return services;
     }
 
+    private static IHostBuilder ConfigureLogger(this IHostBuilder host) {
+        host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
+        return host;
+    }
+
     private static WebApplication ConfigureApp(this WebApplication app)
     {
         if (app.Environment.IsDevelopment())
@@ -45,6 +69,8 @@ public static class Program
         {
             app.UseHsts();
         }
+
+        app.UseSerilogRequestLogging();
 
         app.UseHttpsRedirection();
 

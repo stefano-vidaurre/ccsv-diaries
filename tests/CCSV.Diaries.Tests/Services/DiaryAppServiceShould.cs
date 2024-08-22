@@ -15,6 +15,7 @@ public class DiaryAppServiceShould : IDisposable
 {
     private readonly ApplicationContext _applicationContext;
     private readonly IDiaryRepository _diaryRepository;
+    private readonly IEntryRepository _entryRepository;
     private readonly IMapper _mapper;
 
     private readonly DiaryAppService _diaryAppService;
@@ -23,8 +24,9 @@ public class DiaryAppServiceShould : IDisposable
     {
         _applicationContext = InMemoryApplicationContext.Create();
         _diaryRepository = new DiaryRepository(_applicationContext);
+        _entryRepository = new EntryRepository(_applicationContext);
         _mapper = AutoMapperFactory.Create();
-        _diaryAppService = new DiaryAppService(_diaryRepository, _mapper);
+        _diaryAppService = new DiaryAppService(_diaryRepository, _entryRepository, _mapper);
     }
 
     public void Dispose()
@@ -44,7 +46,7 @@ public class DiaryAppServiceShould : IDisposable
     [Fact]
     public async Task GetEmptyList()
     {
-        IEnumerable<DiaryQueryDto> result = await _diaryAppService.GetAll();
+        IEnumerable<DiaryQueryDto> result = await _diaryAppService.GetAll(new DiaryFilterDto());
 
         result.Should().BeEmpty();
     }

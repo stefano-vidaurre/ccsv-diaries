@@ -47,6 +47,7 @@ public static class Program
         services.AddEntityFramework();
 
         services.AddScoped<IDiaryRepository, DiaryRepository>();
+        services.AddScoped<IEntryRepository, EntryRepository>();
         services.AddScoped<IDiaryAppService, DiaryAppService>();
 
         return services;
@@ -70,9 +71,9 @@ public static class Program
             app.UseHsts();
         }
 
-        app.UseSerilogRequestLogging();
-
         app.UseHttpsRedirection();
+
+        app.UseSerilogRequestLogging();
 
         app.UseHttpStatusCodeExceptionHandler();
 

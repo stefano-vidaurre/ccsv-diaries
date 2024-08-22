@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace CCSV.Diaries.UI.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
+[Tags("Diaries")]
 public class DiariesController : ControllerBase
 {
     private readonly IDiaryAppService _diaryAppService;
@@ -17,13 +18,18 @@ public class DiariesController : ControllerBase
     }
 
     [HttpGet]
-    public Task<IEnumerable<DiaryQueryDto>> GetAll() {
-        return _diaryAppService.GetAll();
+    public Task<IEnumerable<DiaryQueryDto>> GetAll([FromQuery] DiaryFilterDto filter) {
+        return _diaryAppService.GetAll(filter);
     }
 
     [HttpGet("{id}")]
     public Task<DiaryReadDto> GetById(Guid id) {
         return _diaryAppService.GetById(id);
+    }
+
+    [HttpGet("Length")]
+    public Task<int> GetLength() {
+        return _diaryAppService.GetLength();
     }
 
     [HttpPost]
@@ -41,12 +47,17 @@ public class DiariesController : ControllerBase
         return _diaryAppService.Delete(id);
     }
 
-    [HttpPost("{diaryId}/entries")]
+    [HttpGet("{diaryId}/Entries")]
+    public Task<IEnumerable<EntryReadDto>> GetAllEntries(Guid diaryId, [FromQuery] EntryFilterDto filter){
+        return _diaryAppService.GetAllEntries(diaryId, filter);
+    }
+
+    [HttpPost("{diaryId}/Entries")]
     public Task AddEntry(Guid diaryId, [FromBody] EntryCreateDto data){
         return _diaryAppService.AddEntry(diaryId, data);
     }
 
-    [HttpDelete("{diaryId}/entries/{entryId}")]
+    [HttpDelete("{diaryId}/Entries/{entryId}")]
     public Task RemoveEntry(Guid diaryId, Guid entryId) {
         return _diaryAppService.RemoveEntry(diaryId, entryId);
     }

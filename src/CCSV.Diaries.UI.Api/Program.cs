@@ -20,9 +20,9 @@ public static class Program
         try
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-            builder.Services.ConfigureServices();
+            builder.Services.ConfigureServices(builder.Configuration);
             builder.Host.ConfigureLogger();
-            
+
             var app = builder.Build();
             app.ConfigureApp();
             app.Run();
@@ -38,7 +38,7 @@ public static class Program
 
     }
 
-    private static IServiceCollection ConfigureServices(this IServiceCollection services)
+    private static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers();
         services.AddSwaggerGen();
@@ -49,11 +49,12 @@ public static class Program
         services.AddScoped<IDiaryRepository, DiaryRepository>();
         services.AddScoped<IEntryRepository, EntryRepository>();
         services.AddScoped<IDiaryAppService, DiaryAppService>();
+        services.ConfigureCors(configuration);
 
         return services;
     }
-
-    private static IHostBuilder ConfigureLogger(this IHostBuilder host) {
+    private static IHostBuilder ConfigureLogger(this IHostBuilder host)
+    {
         host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
         return host;
@@ -61,6 +62,8 @@ public static class Program
 
     private static WebApplication ConfigureApp(this WebApplication app)
     {
+        app.UseCors();
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

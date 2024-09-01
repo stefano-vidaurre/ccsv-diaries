@@ -133,6 +133,22 @@ public class DiaryAppService : IDiaryAppService
         diary.AddEntry(data.Id, state);
     }
 
+    public async Task UpdateEntry(Guid diaryId, Guid entryId, EntryUpdateDto entryEditDto)
+    {
+        if (entryEditDto.Description is null)
+        {
+            throw new InvalidValueException("Description cannot be null.");
+        }
+
+        Diary diary = await _diaryRepository.GetById(diaryId);
+
+        Entry entry = diary.GetEntry(entryId);
+
+        entry.SetDescription(entryEditDto.Description);
+
+        await _diaryRepository.Update(diary);
+    }
+
     public async Task RemoveEntry(Guid diaryId, Guid entryId)
     {
         Diary diary = await _diaryRepository.GetById(diaryId);

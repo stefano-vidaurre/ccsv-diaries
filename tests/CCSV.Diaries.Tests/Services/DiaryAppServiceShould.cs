@@ -37,7 +37,8 @@ public class DiaryAppServiceShould : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if(disposing) {
+        if (disposing)
+        {
             _applicationContext.Dispose();
         }
     }
@@ -96,6 +97,49 @@ public class DiaryAppServiceShould : IDisposable
     }
 
     [Fact]
+    public async Task UpdateEntryInDiary()
+    {
+        Guid diaryId = Guid.NewGuid();
+        DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = diaryId };
+        await _diaryAppService.Create(diaryCreateDto);
+        await _applicationContext.SaveChangesAsync();
+
+        Guid entryId = Guid.NewGuid();
+        EntryCreateDto entryCreateDto = new EntryCreateDto() { Id = entryId, State = "Normal" };
+        await _diaryAppService.AddEntry(diaryCreateDto.Id, entryCreateDto);
+        await _applicationContext.SaveChangesAsync();
+
+        EntryUpdateDto entryUpdateDto = new EntryUpdateDto() { Description = "Updated Description" };
+
+        await _diaryAppService.UpdateEntry(diaryCreateDto.Id, entryCreateDto.Id, entryUpdateDto);
+        await _applicationContext.SaveChangesAsync();
+
+        DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
+        EntryReadDto? updatedEntry = result.Entries?.FirstOrDefault(e => e.Id == entryCreateDto.Id);
+        updatedEntry.Should().NotBeNull();
+        updatedEntry?.Description.Should().Be("Updated Description");
+    }
+
+    [Fact]
+    public async Task FailWhenUpdateEntryWithNullDescription()
+    {
+        Guid diaryId = Guid.NewGuid();
+        DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = diaryId };
+        await _diaryAppService.Create(diaryCreateDto);
+        await _applicationContext.SaveChangesAsync();
+
+        Guid entryId = Guid.NewGuid();
+        EntryCreateDto entryCreateDto = new EntryCreateDto() { Id = entryId, State = "Normal" };
+        await _diaryAppService.AddEntry(diaryCreateDto.Id, entryCreateDto);
+        await _applicationContext.SaveChangesAsync();
+
+        EntryUpdateDto entryUpdateDto = new EntryUpdateDto() { Description = null };
+        Func<Task> act = async () => await _diaryAppService.UpdateEntry(diaryCreateDto.Id, entryCreateDto.Id, entryUpdateDto);;
+
+        await act.Should().ThrowAsync<InvalidValueException>();
+    }
+
+    [Fact]
     public async Task RemoveEntry()
     {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
@@ -127,7 +171,7 @@ public class DiaryAppServiceShould : IDisposable
 
         Func<Task<DiaryReadDto>> result = async () => await _diaryAppService.GetById(diaryCreateDto.Id);
         await result.Should().ThrowAsync<ValueNotFoundException>();
-    }  
+    }
 
     [Fact]
     public async Task DisableADiary()

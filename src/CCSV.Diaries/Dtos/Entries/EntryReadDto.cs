@@ -7,5 +7,4 @@ public class EntryReadDto
     public string? EntityCreationDate { get; set; }
     public string? EntityEditionDate { get; set; }
     public string? State { get; set; }
-    public string? Description { get; set; }
 }

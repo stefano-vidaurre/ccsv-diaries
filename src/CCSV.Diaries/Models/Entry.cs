@@ -9,11 +9,13 @@ public class Entry : Entity
 
     public Guid DiaryId { get; private set; }
     public State State { get; private set; }
+    public string Description { get; private set; }
 
     private Entry() : base(Guid.Empty)
     {
         DiaryId = Guid.Empty;
         State = State.None;
+        Description = string.Empty;
     }
 
     public Entry(Guid id, Diary diary, State state) : base(id)
@@ -30,10 +32,16 @@ public class Entry : Entity
 
         if (state == State.None)
         {
-            throw new InvalidValueException("The state cant be 'None'.");
+            throw new InvalidValueException("The state cant be none.");
         }
 
         DiaryId = diary.Id;
         State = state;
+        Description = string.Empty;
+    }
+
+    public void SetDescription(string description)
+    {
+        Description = description;
     }
 }

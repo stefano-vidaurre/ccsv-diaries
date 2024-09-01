@@ -57,6 +57,11 @@ public class DiariesController : ControllerBase
         return _diaryAppService.AddEntry(diaryId, data);
     }
 
+    [HttpPut("{diaryId}/Entries/{entryId}")]
+    public Task UpdateEntry(Guid diaryId, Guid entryId, [FromBody] EntryUpdateDto data) {
+        return _diaryAppService.UpdateEntry(diaryId, entryId, data);
+    }
+
     [HttpDelete("{diaryId}/Entries/{entryId}")]
     public Task RemoveEntry(Guid diaryId, Guid entryId) {
         return _diaryAppService.RemoveEntry(diaryId, entryId);

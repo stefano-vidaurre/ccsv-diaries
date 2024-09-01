@@ -6,7 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CCSV.Domain" Version="8.1.0" />
-    <PackageReference Include="CCSV.Data.EFCore" Version="8.1.1" />
+    <PackageReference Include="CCSV.Data.EFCore" Version="8.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8" />

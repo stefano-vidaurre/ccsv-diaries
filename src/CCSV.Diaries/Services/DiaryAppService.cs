@@ -133,6 +133,23 @@ public class DiaryAppService : IDiaryAppService
         diary.AddEntry(data.Id, state);
     }
 
+    public async Task EditEntry(Guid diaryId, Guid entryId, EntryEditDto editDto)
+    {
+        Diary diary = await _diaryRepository.GetById(diaryId);
+        Entry entry = diary.GetEntry(entryId);
+        
+        if (editDto.Description != null)
+        {
+            entry.SetDescription(editDto.Description);
+        }
+        else
+        {
+            entry.ClearDescription();
+        }
+        
+        await _entryRepository.Update(entry);
+    }
+
     public async Task RemoveEntry(Guid diaryId, Guid entryId)
     {
         Diary diary = await _diaryRepository.GetById(diaryId);

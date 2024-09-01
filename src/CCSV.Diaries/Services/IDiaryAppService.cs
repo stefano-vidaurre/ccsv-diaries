@@ -12,6 +12,7 @@ public interface IDiaryAppService
     Task Update(Guid id, DiaryUpdateDto updateDto);
     Task<IEnumerable<EntryReadDto>> GetAllEntries(Guid diaryId, EntryFilterDto filter);
     Task AddEntry(Guid diaryId, EntryCreateDto data);
+    Task EditEntry(Guid diaryId, Guid entryId, EntryEditDto editDto);
     Task RemoveEntry(Guid diaryId, Guid entryId);
     Task Delete(Guid id);
     Task Enable(Guid id);

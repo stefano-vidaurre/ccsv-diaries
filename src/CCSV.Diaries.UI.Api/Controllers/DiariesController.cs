@@ -71,4 +71,10 @@ public class DiariesController : ControllerBase
     public Task Disable(Guid id) {
         return _diaryAppService.Disable(id);
     }
+
+    [HttpPut("{diaryId}/Entries/{entryId}")]
+    public Task EditEntry(Guid diaryId, Guid entryId, [FromBody] EntryEditDto editDto)
+    {
+        return _diaryAppService.EditEntry(diaryId, entryId, editDto);
+    }
 }

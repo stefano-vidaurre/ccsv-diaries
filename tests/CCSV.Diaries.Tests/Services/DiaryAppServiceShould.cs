@@ -158,4 +158,54 @@ public class DiaryAppServiceShould : IDisposable
         DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
         result.IsDisabled.Should().BeFalse();
     }
+
+    [Fact]
+    public async Task EditEntryDescriptionWhenProvidingNewDescription()
+    {
+        DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
+        await _diaryAppService.Create(diaryCreateDto);
+        await _applicationContext.SaveChangesAsync();
+        EntryCreateDto entryCreateDto = new EntryCreateDto() 
+        {
+            Id = Guid.NewGuid(),
+            State = "Normal"
+        };
+        await _diaryAppService.AddEntry(diaryCreateDto.Id, entryCreateDto);
+        await _applicationContext.SaveChangesAsync();
+        string newDescription = "Nueva descripción";
+        EntryEditDto entryEditDto = new EntryEditDto() { Description = newDescription };
+
+        await _diaryAppService.EditEntry(diaryCreateDto.Id, entryCreateDto.Id, entryEditDto);
+        await _applicationContext.SaveChangesAsync();
+
+        DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
+        EntryReadDto? updatedEntry = result.Entries?.FirstOrDefault(e => e.Id == entryCreateDto.Id);
+        updatedEntry.Should().NotBeNull();
+        updatedEntry?.Description.Should().Be(newDescription);
+    }
+
+    [Fact]
+    public async Task ClearEntryDescriptionWhenProvidingNullDescription()
+    {
+        DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
+        await _diaryAppService.Create(diaryCreateDto);
+        await _applicationContext.SaveChangesAsync();
+        EntryCreateDto entryCreateDto = new EntryCreateDto() 
+        {
+            Id = Guid.NewGuid(),
+            State = "Normal"
+        };
+        await _diaryAppService.AddEntry(diaryCreateDto.Id, entryCreateDto);
+        await _applicationContext.SaveChangesAsync();
+        await _diaryAppService.EditEntry(diaryCreateDto.Id, entryCreateDto.Id, new EntryEditDto { Description = "Descripción inicial" });
+        await _applicationContext.SaveChangesAsync();
+
+        await _diaryAppService.EditEntry(diaryCreateDto.Id, entryCreateDto.Id, new EntryEditDto { Description = null });
+        await _applicationContext.SaveChangesAsync();
+
+        DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
+        EntryReadDto? updatedEntry = result.Entries?.FirstOrDefault(e => e.Id == entryCreateDto.Id);
+        updatedEntry.Should().NotBeNull();
+        updatedEntry?.Description.Should().BeEmpty();
+    }
 }

@@ -6,7 +6,9 @@ using CCSV.Diaries.Dtos.Entries;
 using CCSV.Diaries.Repositories;
 using CCSV.Diaries.Services;
 using CCSV.Diaries.Services.Mappings;
+using CCSV.Diaries.Services.Validators;
 using CCSV.Domain.Exceptions;
+using CCSV.Rest.Validators;
 using FluentAssertions;
 
 namespace CCSV.Diaries.Tests.Services;
@@ -16,6 +18,7 @@ public class DiaryAppServiceShould : IDisposable
     private readonly ApplicationContext _applicationContext;
     private readonly IDiaryRepository _diaryRepository;
     private readonly IEntryRepository _entryRepository;
+    private readonly IMasterValidator _masterValidator;
     private readonly IMapper _mapper;
 
     private readonly DiaryAppService _diaryAppService;
@@ -25,8 +28,9 @@ public class DiaryAppServiceShould : IDisposable
         _applicationContext = InMemoryApplicationContext.Create();
         _diaryRepository = new DiaryRepository(_applicationContext);
         _entryRepository = new EntryRepository(_applicationContext);
+        _masterValidator = ValidatorFactory.Create();
         _mapper = AutoMapperFactory.Create();
-        _diaryAppService = new DiaryAppService(_diaryRepository, _entryRepository, _mapper);
+        _diaryAppService = new DiaryAppService(_diaryRepository, _entryRepository, _masterValidator, _mapper);
     }
 
     public void Dispose()

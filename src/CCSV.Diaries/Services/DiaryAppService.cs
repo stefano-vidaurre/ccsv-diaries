@@ -5,6 +5,7 @@ using CCSV.Diaries.Models;
 using CCSV.Diaries.Repositories;
 using CCSV.Domain.Exceptions;
 using CCSV.Domain.Parsers;
+using CCSV.Rest.Validators;
 
 namespace CCSV.Diaries.Services;
 
@@ -12,14 +13,17 @@ public class DiaryAppService : IDiaryAppService
 {
     private readonly IDiaryRepository _diaryRepository;
     private readonly IEntryRepository _entryRepository;
+    private readonly IMasterValidator _masterValidator;
     private readonly IMapper _mapper;
 
     public DiaryAppService(IDiaryRepository diaryRepository,
         IEntryRepository entryRepository,
+        IMasterValidator masterValidator,
         IMapper mapper)
     {
         _diaryRepository = diaryRepository;
         _entryRepository = entryRepository;
+        _masterValidator = masterValidator;
         _mapper = mapper;
     }
 
@@ -76,14 +80,18 @@ public class DiaryAppService : IDiaryAppService
 
     public async Task Create(DiaryCreateDto data)
     {
+        _masterValidator.Validate(data);
+
         Diary diary = new Diary(data.Id);
         await _diaryRepository.Create(diary);
     }
 
-    public async Task Update(Guid id, DiaryUpdateDto updateDto)
+    public async Task Update(Guid id, DiaryUpdateDto data)
     {
+        //_masterValidator.Validate(data);
+
         Diary diary = await _diaryRepository.GetById(id);
-        DateTime expirationDate = DateTimeParser.ParseUTC(updateDto.ExpirationDate);
+        DateTime expirationDate = DateTimeParser.ParseUTC(data.ExpirationDate);
         diary.SetExpirationDate(expirationDate);
     }
 

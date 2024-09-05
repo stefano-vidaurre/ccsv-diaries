@@ -21,3 +21,7 @@ dotnet ef migrations add "<Migration Name>" --project "src/CCSV.Diaries" --conte
 ~~~bash
 dotnet ef database update --project "src/CCSV.Diaries.UI.Api" --context "InFileApplicationContext" 
 ~~~
+
+## Documentation
+
+[Diaries API Doc](https://github.com/yacineMTB/dingllm.nvim?tab=readme-ov-file#documentation "Diaries API Doc")

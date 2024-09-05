@@ -6,6 +6,8 @@ using CCSV.Diaries.Repositories;
 using CCSV.Diaries.Services;
 using CCSV.Diaries.Services.Mappings;
 using Serilog;
+using CCSV.Diaries.Services.Validators;
+using CCSV.Rest.Validators;
 
 namespace CCSV.Diaries.UI.Api;
 
@@ -43,6 +45,7 @@ public static class Program
         services.AddControllers();
         services.AddSwaggerGen();
         services.AddSingleton<IMapper>(_ => AutoMapperFactory.Create());
+        services.AddSingleton<IMasterValidator>(_ => ValidatorFactory.Create());
         services.AddDbContext<ApplicationContext, InFileApplicationContext>();
         services.AddEntityFramework();
 

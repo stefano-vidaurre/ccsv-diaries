@@ -9,7 +9,7 @@ public interface IDiaryAppService
     Task<DiaryReadDto> GetById(Guid id);
     Task<int> GetLength();
     Task Create(DiaryCreateDto data);
-    Task Update(Guid id, DiaryUpdateDto updateDto);
+    Task Update(Guid id, DiaryUpdateDto data);
     Task<IEnumerable<EntryReadDto>> GetAllEntries(Guid diaryId, EntryFilterDto filter);
     Task AddEntry(Guid diaryId, EntryCreateDto data);
     Task RemoveEntry(Guid diaryId, Guid entryId);

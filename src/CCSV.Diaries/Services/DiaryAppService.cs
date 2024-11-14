@@ -88,7 +88,7 @@ public class DiaryAppService : IDiaryAppService
 
     public async Task Update(Guid id, DiaryUpdateDto data)
     {
-        //_masterValidator.Validate(data);
+        _masterValidator.Validate(data);
 
         Diary diary = await _diaryRepository.GetById(id);
         DateTime expirationDate = DateTimeParser.ParseUTC(data.ExpirationDate);

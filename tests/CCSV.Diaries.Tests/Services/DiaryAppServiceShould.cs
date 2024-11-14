@@ -73,7 +73,7 @@ public class DiaryAppServiceShould : IDisposable
         DiaryCreateDto createDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(createDto);
         await _applicationContext.SaveChangesAsync();
-        DiaryUpdateDto updateDto = new DiaryUpdateDto() { ExpirationDate = DateTime.UtcNow.ToString("O") };
+        DiaryUpdateDto updateDto = new DiaryUpdateDto() { ExpirationDate = null };
 
         await _diaryAppService.Update(createDto.Id, updateDto);
 

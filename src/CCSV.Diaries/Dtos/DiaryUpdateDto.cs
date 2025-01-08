@@ -2,5 +2,5 @@ namespace CCSV.Diaries.Dtos.Diaries;
 
 public class DiaryUpdateDto
 {
-    public string? ExpirationDate { get; set; }
+    public string? ExpirationDate { get; init; }
 }

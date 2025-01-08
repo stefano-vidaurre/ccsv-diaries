@@ -4,11 +4,11 @@ namespace CCSV.Diaries.Dtos.Diaries;
 
 public class DiaryReadDto
 {
-    public Guid Id { get; set; }
-    public string? EntityCreationDate { get; set; }
-    public string? EntityEditionDate { get; set; }
-    public string? EntityDisabledDate { get; set; }
-    public string? ExpirationDate { get; set; }
-    public bool IsDisabled { get; set; }
-    public IEnumerable<EntryReadDto>? Entries { get; set; }
+    public Guid Id { get; init; }
+    public string? EntityCreationDate { get; init; }
+    public string? EntityEditionDate { get; init; }
+    public string? EntityDisabledDate { get; init; }
+    public string? ExpirationDate { get; init; }
+    public bool IsDisabled { get; init; }
+    public IEnumerable<EntryReadDto>? Entries { get; init; }
 }

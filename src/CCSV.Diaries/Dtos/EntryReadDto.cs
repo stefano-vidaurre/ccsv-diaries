@@ -2,9 +2,9 @@ namespace CCSV.Diaries.Dtos.Entries;
 
 public class EntryReadDto
 {
-    public Guid Id { get; set; }
-    public Guid DiaryId { get; set; }
-    public string? EntityCreationDate { get; set; }
-    public string? EntityEditionDate { get; set; }
-    public string? State { get; set; }
+    public Guid Id { get; init; }
+    public Guid DiaryId { get; init; }
+    public string? EntityCreationDate { get; init; }
+    public string? EntityEditionDate { get; init; }
+    public string? State { get; init; }
 }

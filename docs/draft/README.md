@@ -17,5 +17,3 @@
 - Implementar header para Idempotency Key
 
 - Implementar Arquitecture Test
-
-- Eliminar la excepcion not allowed, wrong para fallos de cliente y bussiness para fallos del programador

@@ -100,7 +100,7 @@ public class DiaryShould
 
         Action result = () => diary.AddEntry(entryId, State.Normal);
 
-        result.Should().Throw<NotAllowedOperationException>();
+        result.Should().Throw<WrongOperationException>();
     }
 
     [Fact]
@@ -115,6 +115,6 @@ public class DiaryShould
 
         Action result = () => diary.RemoveEntry(entry);
 
-        result.Should().Throw<NotAllowedOperationException>();
+        result.Should().Throw<WrongOperationException>();
     }
 }

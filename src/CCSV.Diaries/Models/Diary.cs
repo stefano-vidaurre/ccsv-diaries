@@ -50,7 +50,7 @@ public class Diary : Entity
 
         if (ExpirationDate < DateTime.UtcNow)
         {
-            throw new NotAllowedOperationException("The diary expiration date is out of date.");
+            throw new WrongOperationException("The diary expiration date is out of date.");
         }
 
         Entry entry = new Entry(id, this, state);
@@ -83,7 +83,7 @@ public class Diary : Entity
 
         if (ExpirationDate < DateTime.UtcNow)
         {
-            throw new NotAllowedOperationException("The expiration date of the diary is out of date.");
+            throw new WrongOperationException("The expiration date of the diary is out of date.");
         }
 
         if (!_entries.Remove(entry))

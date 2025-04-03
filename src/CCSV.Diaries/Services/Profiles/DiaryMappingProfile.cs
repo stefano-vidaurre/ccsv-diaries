@@ -2,7 +2,7 @@ using AutoMapper;
 using CCSV.Diaries.Dtos.Diaries;
 using CCSV.Diaries.Models;
 
-namespace CCSV.Diaries.Services.Mappings;
+namespace CCSV.Diaries.Services.Profiles;
 
 public class DiaryMappingProfile : Profile
 {

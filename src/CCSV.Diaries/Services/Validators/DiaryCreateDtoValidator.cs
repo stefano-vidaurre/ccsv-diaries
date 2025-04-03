@@ -1,5 +1,5 @@
 using CCSV.Diaries.Dtos.Diaries;
-using CCSV.Rest.Validators;
+using CCSV.Domain.Validators;
 
 namespace CCSV.Diaries.Services.Validators;
 

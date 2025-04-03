@@ -4,10 +4,10 @@ using CCSV.Data.EFCore;
 using CCSV.Diaries.Contexts;
 using CCSV.Diaries.Repositories;
 using CCSV.Diaries.Services;
-using CCSV.Diaries.Services.Mappings;
+using CCSV.Diaries.Services.Profiles;
 using Serilog;
 using CCSV.Diaries.Services.Validators;
-using CCSV.Rest.Validators;
+using CCSV.Domain.Validators;
 
 namespace CCSV.Diaries.UI.Api;
 

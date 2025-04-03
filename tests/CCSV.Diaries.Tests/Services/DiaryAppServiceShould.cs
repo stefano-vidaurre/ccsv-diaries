@@ -5,10 +5,11 @@ using CCSV.Diaries.Dtos.Diaries;
 using CCSV.Diaries.Dtos.Entries;
 using CCSV.Diaries.Repositories;
 using CCSV.Diaries.Services;
-using CCSV.Diaries.Services.Mappings;
+using CCSV.Diaries.Services.Profiles;
 using CCSV.Diaries.Services.Validators;
 using CCSV.Domain.Exceptions;
-using CCSV.Rest.Validators;
+using CCSV.Domain.Repositories;
+using CCSV.Domain.Validators;
 using FluentAssertions;
 
 namespace CCSV.Diaries.Tests.Services;
@@ -16,6 +17,7 @@ namespace CCSV.Diaries.Tests.Services;
 public class DiaryAppServiceShould : IDisposable
 {
     private readonly ApplicationContext _applicationContext;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IDiaryRepository _diaryRepository;
     private readonly IEntryRepository _entryRepository;
     private readonly IMasterValidator _masterValidator;
@@ -26,6 +28,7 @@ public class DiaryAppServiceShould : IDisposable
     public DiaryAppServiceShould()
     {
         _applicationContext = InMemoryApplicationContext.Create();
+        _unitOfWork = new UnitOfWork(_applicationContext);
         _diaryRepository = new DiaryRepository(_applicationContext);
         _entryRepository = new EntryRepository(_applicationContext);
         _masterValidator = ValidatorFactory.Create();
@@ -61,7 +64,7 @@ public class DiaryAppServiceShould : IDisposable
         DiaryCreateDto createDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
 
         await _diaryAppService.Create(createDto);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         DiaryReadDto result = await _diaryAppService.GetById(createDto.Id);
         result.Id.Should().Be(createDto.Id);
@@ -72,10 +75,11 @@ public class DiaryAppServiceShould : IDisposable
     {
         DiaryCreateDto createDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(createDto);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
         DiaryUpdateDto updateDto = new DiaryUpdateDto() { ExpirationDate = DateTime.UtcNow.ToString("O") };
 
         await _diaryAppService.Update(createDto.Id, updateDto);
+        await _unitOfWork.SaveAsync();
 
         DiaryReadDto result = await _diaryAppService.GetById(createDto.Id);
         result.ExpirationDate.Should().Be(updateDto.ExpirationDate);
@@ -86,14 +90,14 @@ public class DiaryAppServiceShould : IDisposable
     {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(diaryCreateDto);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
         EntryCreateDto entryCreateDto = new EntryCreateDto() {
             Id = Guid.NewGuid(),
             State = "Normal"
         };
 
         await _diaryAppService.AddEntry(diaryCreateDto.Id, entryCreateDto);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
         result.Entries.Should().Contain(entry => entry.Id == entryCreateDto.Id);
@@ -104,16 +108,16 @@ public class DiaryAppServiceShould : IDisposable
     {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(diaryCreateDto);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
         EntryCreateDto entryCreateDto = new EntryCreateDto() {
             Id = Guid.NewGuid(),
             State = "Normal"
         };
         await _diaryAppService.AddEntry(diaryCreateDto.Id, entryCreateDto);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         await _diaryAppService.RemoveEntry(diaryCreateDto.Id, entryCreateDto.Id);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
         result.Entries.Should().NotContain(entry => entry.Id == entryCreateDto.Id);
@@ -124,10 +128,10 @@ public class DiaryAppServiceShould : IDisposable
     {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(diaryCreateDto);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         await _diaryAppService.Delete(diaryCreateDto.Id);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         Func<Task<DiaryReadDto>> result = async () => await _diaryAppService.GetById(diaryCreateDto.Id);
         await result.Should().ThrowAsync<ValueNotFoundException>();
@@ -138,10 +142,10 @@ public class DiaryAppServiceShould : IDisposable
     {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(diaryCreateDto);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         await _diaryAppService.Disable(diaryCreateDto.Id);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
         result.IsDisabled.Should().BeTrue();
@@ -152,12 +156,12 @@ public class DiaryAppServiceShould : IDisposable
     {
         DiaryCreateDto diaryCreateDto = new DiaryCreateDto() { Id = Guid.NewGuid() };
         await _diaryAppService.Create(diaryCreateDto);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
         await _diaryAppService.Disable(diaryCreateDto.Id);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         await _diaryAppService.Enable(diaryCreateDto.Id);
-        await _applicationContext.SaveChangesAsync();
+        await _unitOfWork.SaveAsync();
 
         DiaryReadDto result = await _diaryAppService.GetById(diaryCreateDto.Id);
         result.IsDisabled.Should().BeFalse();

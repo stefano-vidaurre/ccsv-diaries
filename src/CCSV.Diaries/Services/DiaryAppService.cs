@@ -5,7 +5,7 @@ using CCSV.Diaries.Models;
 using CCSV.Diaries.Repositories;
 using CCSV.Domain.Exceptions;
 using CCSV.Domain.Parsers;
-using CCSV.Rest.Validators;
+using CCSV.Domain.Validators;
 
 namespace CCSV.Diaries.Services;
 

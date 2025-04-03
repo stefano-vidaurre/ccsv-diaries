@@ -1,6 +1,6 @@
 using AutoMapper;
 
-namespace CCSV.Diaries.Services.Mappings;
+namespace CCSV.Diaries.Services.Profiles;
 
 public static class AutoMapperFactory
 {
